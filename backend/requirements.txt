@@ -1,6 +1,7 @@
 fastapi>=0.115,<0.116
 uvicorn[standard]>=0.34,<0.35
 sqlalchemy>=2.0,<3.0
+psycopg2-binary>=2.9,<3.0    # PostgreSQL driver for Supabase
 pydantic-settings>=2.7,<3.0
 python-multipart>=0.0.12
 moviepy>=2.1,<3.0

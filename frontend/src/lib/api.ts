@@ -42,6 +42,21 @@ export async function getSubreddits() {
   return data;
 }
 
+// --- AI Story Generation ---
+export async function getStoryStyles() {
+  const { data } = await api.get('/reddit/story-styles');
+  return data;
+}
+
+export async function generateAIStory(params: {
+  topic?: string;
+  style?: string;
+  custom_prompt?: string;
+}) {
+  const { data } = await api.post('/reddit/generate-story', params);
+  return data;
+}
+
 export async function generateRedditVideo(params: {
   story_title: string;
   story_text: string;

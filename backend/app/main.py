@@ -82,6 +82,8 @@ def health_check():
     return {
         "status": "healthy",
         "features": {
+            "supabase": bool(settings.SUPABASE_DB_URL),
+            "openrouter": bool(settings.OPENROUTER_API_KEY),
             "reddit": bool(settings.REDDIT_CLIENT_ID),
             "sora": bool(settings.OPENAI_API_KEY),
             "pexels": bool(settings.PEXELS_API_KEY),

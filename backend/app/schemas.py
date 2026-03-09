@@ -69,6 +69,12 @@ class RedditStory(BaseModel):
     created_utc: float
 
 
+class AIStoryRequest(BaseModel):
+    topic: str = ""  # Optional topic hint
+    style: str = "reddit_tifu"  # Story style (tifu, askreddit, nosleep, etc.)
+    custom_prompt: str = ""  # Override system prompt entirely
+
+
 class RedditGenerateRequest(BaseModel):
     story_title: str
     story_text: str

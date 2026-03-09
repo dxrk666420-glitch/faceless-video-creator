@@ -3,10 +3,14 @@ from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
 from app.config import settings
 
-engine = create_engine(
-    settings.DATABASE_URL,
-    connect_args={"check_same_thread": False},  # SQLite specific
-)
+# Use Supabase PostgreSQL if configured, otherwise fall back to SQLite
+db_url = settings.SUPABASE_DB_URL or settings.DATABASE_URL
+
+connect_args = {}
+if db_url.startswith("sqlite"):
+    connect_args["check_same_thread"] = False
+
+engine = create_engine(db_url, connect_args=connect_args)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 

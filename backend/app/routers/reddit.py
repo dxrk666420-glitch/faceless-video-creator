@@ -9,8 +9,8 @@ from sqlalchemy.orm import Session
 from app.config import settings
 from app.database import get_db
 from app.models import Project, Video
-from app.schemas import RedditGenerateRequest, RedditStory
-from app.services import pexels_service, reddit_service, tts_service, video_service
+from app.schemas import RedditGenerateRequest, RedditStory, AIStoryRequest
+from app.services import ai_story_service, pexels_service, reddit_service, tts_service, video_service
 from app.tasks.task_manager import task_manager
 
 router = APIRouter(prefix="/api/reddit", tags=["reddit"])
@@ -27,6 +27,25 @@ async def list_voices():
 def list_subreddits():
     """List popular story subreddits."""
     return reddit_service.STORY_SUBREDDITS
+
+
+@router.get("/story-styles")
+def list_story_styles():
+    """List available AI story generation styles."""
+    return ai_story_service.get_story_styles()
+
+
+@router.post("/generate-story")
+async def generate_ai_story(req: AIStoryRequest):
+    """Generate a story using AI via OpenRouter."""
+    result = await ai_story_service.generate_story(
+        topic=req.topic,
+        style=req.style,
+        custom_prompt=req.custom_prompt,
+    )
+    if "error" in result:
+        raise HTTPException(status_code=400, detail=result["error"])
+    return result
 
 
 @router.get("/search", response_model=list[RedditStory])

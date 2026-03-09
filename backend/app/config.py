@@ -6,9 +6,15 @@ from pydantic_settings import BaseSettings
 class Settings(BaseSettings):
     DATABASE_URL: str = "sqlite:///./faceless.db"
 
+    # Supabase (set SUPABASE_DB_URL to use PostgreSQL instead of SQLite)
+    SUPABASE_URL: str = ""        # e.g. https://xxxx.supabase.co
+    SUPABASE_KEY: str = ""        # anon or service_role key
+    SUPABASE_DB_URL: str = ""     # postgresql://postgres:...@db.xxxx.supabase.co:5432/postgres
+
     # Optional API keys
     ELEVENLABS_API_KEY: str = ""
     OPENAI_API_KEY: str = ""
+    OPENROUTER_API_KEY: str = ""  # For AI story generation
     PEXELS_API_KEY: str = ""
     REDDIT_CLIENT_ID: str = ""
     REDDIT_CLIENT_SECRET: str = ""

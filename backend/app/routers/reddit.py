@@ -2,6 +2,7 @@
 
 import asyncio
 import os
+import re
 
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
 from sqlalchemy.orm import Session
@@ -56,6 +57,15 @@ def search_stories(
     time_filter: str = "week",
 ):
     """Search for stories on Reddit."""
+    # Validate inputs
+    if not re.match(r'^[a-zA-Z0-9_]{1,50}$', subreddit):
+        raise HTTPException(status_code=400, detail="Invalid subreddit name")
+    if sort not in ("hot", "top", "new", "rising"):
+        raise HTTPException(status_code=400, detail="Invalid sort option")
+    if time_filter not in ("hour", "day", "week", "month", "year", "all"):
+        raise HTTPException(status_code=400, detail="Invalid time filter")
+    limit = max(1, min(limit, 50))
+
     stories = reddit_service.search_stories(
         subreddit=subreddit,
         sort=sort,

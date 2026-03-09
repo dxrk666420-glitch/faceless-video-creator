@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Any, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 # --- Project schemas ---
@@ -70,19 +70,19 @@ class RedditStory(BaseModel):
 
 
 class AIStoryRequest(BaseModel):
-    topic: str = ""  # Optional topic hint
-    style: str = "reddit_tifu"  # Story style (tifu, askreddit, nosleep, etc.)
-    custom_prompt: str = ""  # Override system prompt entirely
+    topic: str = Field("", max_length=500)
+    style: str = Field("reddit_tifu", max_length=50)
+    custom_prompt: str = Field("", max_length=2000)
 
 
 class RedditGenerateRequest(BaseModel):
-    story_title: str
-    story_text: str
-    voice: str = "en-US-ChristopherNeural"
-    background_category: str = "satisfying"  # minecraft | subway_surfers | satisfying
-    font_size: int = 70
-    font_color: str = "#FFFFFF"
-    highlight_color: str = "#FFD700"
+    story_title: str = Field(..., min_length=1, max_length=500)
+    story_text: str = Field(..., min_length=1, max_length=50000)
+    voice: str = Field("en-US-ChristopherNeural", max_length=100)
+    background_category: str = Field("satisfying", max_length=50)
+    font_size: int = Field(70, ge=20, le=200)
+    font_color: str = Field("#FFFFFF", pattern=r'^#[0-9A-Fa-f]{6}$')
+    highlight_color: str = Field("#FFD700", pattern=r'^#[0-9A-Fa-f]{6}$')
 
 
 # --- Sora schemas ---
